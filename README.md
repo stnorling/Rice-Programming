@@ -1,1 +1,1 @@
-Programs made throughout the rice University online programming courses for Python
+Programs made throughout the Rice University online programming courses for Python
