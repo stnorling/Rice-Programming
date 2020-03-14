@@ -9,7 +9,6 @@ height = 200
 width = 200
 a, b, c, d = 0, 0, 0, 0
 x, y = 0, 0
-new = False
 score = "0/0"
 
 # define helper function format that converts time
@@ -22,24 +21,22 @@ def format(t):
     a = t / 600
     ft = str(a) + ":" + str(b) + str(c) + "." + str(d)
     return ft
-    
+
 # define event handlers for buttons; "Start", "Stop", "Reset"
 
 def start():
     global new
     t.start()
-    new = True
-    
+
 def stop():
-    global x, y, new, score
-    t.stop()
-    if new == True:
+    global x, y, score
+    if t.is_running():
         y += 1
         if count % 10 == 0:
             x += 1
-    new = False
-    score = str(x) + "/" + str(y) 
-    
+    t.stop()
+    score = str(x) + "/" + str(y)
+
 def reset():
     global count, x, y, score
     t.stop()
@@ -57,7 +54,7 @@ def timer():
 def draw(canvas):
     canvas.draw_text(format(count), [height / 2.5, width / 2], 18, 'White')
     canvas.draw_text(score, [height / 1.2, width / 5], 14, 'White')
-        
+
 # create frame
 
 f = simplegui.create_frame("Stopwatch", height, width)

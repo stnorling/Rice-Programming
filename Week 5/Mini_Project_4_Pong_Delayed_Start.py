@@ -13,31 +13,44 @@ HALF_PAD_WIDTH = PAD_WIDTH / 2
 HALF_PAD_HEIGHT = PAD_HEIGHT / 2
 LEFT = False
 RIGHT = True
-vel = 4
+vel = 5
+right = False
 
 # initialize ball_pos and ball_vel for new ball in middle of table
 # if direction is RIGHT, the ball's velocity is upper right, else upper left
 def spawn_ball(direction):
     global ball_pos, ball_vel # these are vectors stored as lists
+    t.stop()
     ball_pos = [WIDTH / 2, HEIGHT / 2]
     ball_vel = [0, 0]
     if direction == RIGHT:
-        ball_vel = [random.randrange(3, 5), -random.randrange(1, 3)]    
+        ball_vel = [random.randrange(4, 6), -random.randrange(1, 3)]    
     elif direction == LEFT:
-        ball_vel = [-random.randrange(3, 5), -random.randrange(1, 3)]    
+        ball_vel = [-random.randrange(4, 6), -random.randrange(1, 3)]    
 
+def timer():
+    if right:
+        spawn_ball(RIGHT)
+    else:
+        spawn_ball(LEFT)
+        
+        
 # define event handlers
 def new_game():
     global paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel  # these are numbers
     global score1, score2  # these are ints
+    global ball_pos, ball_vel # these are vectors stored as lists
+    t.stop()
+    ball_pos = [WIDTH / 2, HEIGHT / 2]
+    ball_vel = [0, 0]
     paddle1_pos, paddle2_pos = HEIGHT / 2, HEIGHT / 2
     paddle1_vel, paddle2_vel = 0, 0
     score1, score2 = 0, 0
-    spawn_ball(LEFT)
-
+    t.start()
     
+        
 def draw(canvas):
-    global score1, score2, paddle1_pos, paddle2_pos, ball_pos, ball_vel
+    global score1, score2, paddle1_pos, paddle2_pos, ball_pos, ball_vel, right
         
     # draw mid line and gutters
     canvas.draw_line([WIDTH / 2, 0],[WIDTH / 2, HEIGHT], 1, "White")
@@ -79,13 +92,20 @@ def draw(canvas):
         ball_vel[0] = - ball_vel[0] * 1.10
     elif ball_pos[0] < PAD_WIDTH + BALL_RADIUS:
         score2 += 1
-        spawn_ball(RIGHT)
+        ball_pos = [WIDTH / 2, HEIGHT / 2]
+        ball_vel = [0, 0]
+        right = True
+        t.start()
+
     
     if abs(paddle2_pos - ball_pos[1]) <= abs(PAD_HEIGHT / 2) and ball_pos[0] > WIDTH - PAD_WIDTH - BALL_RADIUS:
         ball_vel[0] = - ball_vel[0] * 1.10
     elif ball_pos[0] > WIDTH - PAD_WIDTH - BALL_RADIUS:
         score1 += 1
-        spawn_ball(LEFT)
+        ball_pos = [WIDTH / 2, HEIGHT / 2]
+        ball_vel = [0, 0]
+        right = False
+        t.start()
     
     # draw scores
     
@@ -123,6 +143,7 @@ frame.set_keydown_handler(keydown)
 frame.set_keyup_handler(keyup)
 frame.add_button('Reset', new_game, 50)
 
+t = simplegui.create_timer(750, timer)
 
 # start frame
 new_game()
