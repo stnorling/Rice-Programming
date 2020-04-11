@@ -154,11 +154,7 @@ def aiRandom():
             and C_Count == 0:
             paddle2_pos += commitedDirection
         else:
-            C_Count += 1
-            if C_Count % 2 == 0:
-                paddle2_pos -= commitedDirection
-            if C_Count == 10:
-                C_Count = 0
+            aiToCenter()
         Timer += 1
     else:
         movingRandom = True
@@ -173,7 +169,7 @@ def aiRandom():
 
 
 def aiToBall():
-    global paddle2_pos, movingRandom, vel, Timer, C_Count
+    global paddle2_pos, movingRandom, vel
 
     movingRandom = False
     
@@ -185,18 +181,24 @@ def aiToBall():
         else:
             paddle2_pos -= vel
     else:
-        C_Count += 1
-        print 'Center move mode engaged'
-        if C_Count % 2 == 0:
-            if paddle2_pos > HEIGHT / 2:
-                paddle2_pos -= vel
-            else:
-                paddle2_pos += vel
-            if C_Count == 10:
-                C_Count = 0
-                print 'Center move mode disengaged'
-        
+        aiToCenter()                
+       
 
+def aiToCenter():
+    global C_Count, paddle2_pos
+    
+    C_Count += 1
+    print C_Count
+    if C_Count > 15 :
+        if paddle2_pos > HEIGHT / 2:
+            paddle2_pos -= vel
+        else:
+            paddle2_pos += vel
+            
+    if C_Count == 20:
+        C_Count = 0
+        aiToBall()
+        
         
 def keydown(key):
     global paddle1_vel, paddle2_vel
