@@ -107,7 +107,7 @@ def deal():
     
     if in_play:
         outcome = 'Dealt during round. Player loses. Hit or stand?'
-        games_played += 1
+        games_played += 1    
     else:
         outcome = 'Hit or stand?'
 
@@ -128,14 +128,15 @@ def hit():
     global in_play, outcome, games_played
     
     if in_play:
+        outcome = 'Hit or stand?'
         if player_hand.get_value() < 21:
             player_hand.add_card(deck.deal_card())
-            #print 'Player ' + str(player_hand)
-            #print player_hand.get_value()
             if player_hand.get_value() > 21:
                 outcome = 'Player busts.'
                 games_played += 1
                 in_play = False
+        elif player_hand.get_value() == 21:
+            outcome = "You're at 21! Why would you want to hit!"
     else:
         outcome = 'Game is not in play. New deal?'
 
