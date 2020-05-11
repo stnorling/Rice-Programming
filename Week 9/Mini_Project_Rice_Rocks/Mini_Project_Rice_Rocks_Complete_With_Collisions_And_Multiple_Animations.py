@@ -191,7 +191,7 @@ class Ship:
         # that is seperate from the ship's forward_vector
         
         self.forward_vector = angle_to_vector(self.angle)
-        a_missile = Sprite([self.pos[0] + self.forward_vector[0] * self.radius, self.pos[1] + self.forward_vector[1] * 45], 
+        a_missile = Sprite([self.pos[0] + self.forward_vector[0] * self.radius, self.pos[1] + self.forward_vector[1] * self.radius], 
                           [self.vel[0] + (9 * self.forward_vector[0]),self.vel[1] + (9 * self.forward_vector[1])],
                           0, 0, missile_image, missile_info, missile_sound)
         missile_group.add(a_missile)
